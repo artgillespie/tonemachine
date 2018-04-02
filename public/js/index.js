@@ -1,23 +1,15 @@
-function elid(id) {
-  return document.getElementById(id)
-}
-function elevt(el, evt, fn) {
-  return el.addEventListener(evt, fn)
-}
-function qsel(sel) {
-  return document.querySelector(sel)
-}
-function newel(tag) {
-  return document.createElement(tag)
-}
+const elid = id => document.getElementById(id)
+const elevt = (el, evt, fn) => el.addEventListener(evt, fn)
+const qsel = sel => document.querySelector(sel)
+const newel = tag => document.createElement(tag)
 
-function ready(fn) {
+const ready = fn => {
   document.addEventListener('DOMContentLoaded', fn)
 }
 
-ready(function() {
+ready(() => {
   const tbtn = elid('play-btn')
-  elevt(tbtn, 'change', function(evt) {
+  elevt(tbtn, 'change', evt => {
     Tone.Transport.toggle()
   })
 
@@ -26,7 +18,7 @@ ready(function() {
     tempo: qsel('#transport-disp #tempo #disp')
   }
 
-  function update() {
+  const update = () => {
     requestAnimationFrame(update)
     transport.pos.innerText = Tone.Transport.position
     transport.tempo.innerText = Tone.Transport.bpm.value.toFixed(2)
@@ -52,9 +44,9 @@ ready(function() {
     }
 
     createPadHandler(i) {
-      var fn = function(evt) {
-        var q = Math.floor(i / 4)
-        var s = i % 4
+      var fn = evt => {
+        const q = Math.floor(i / 4)
+        const s = i % 4
         if (evt.target.checked) {
           this.part.add(`0:${q}:${s}`)
         } else {
@@ -65,9 +57,9 @@ ready(function() {
     }
 
     setupPads() {
-      var trackEl = newel('div')
+      const trackEl = newel('div')
       for (var i = 0; i < 16; i++) {
-        var pad = newel('input')
+        const pad = newel('input')
         pad.setAttribute('type', 'checkbox')
         elevt(pad, 'change', this.createPadHandler(i))
         trackEl.appendChild(pad)
@@ -76,20 +68,20 @@ ready(function() {
     }
   }
 
-  var hatTrack = new DMSampleTrack('/audio/hh.ogg')
-  var kickTrack = new DMSampleTrack('/audio/bd.ogg')
-  var snare = new DMSampleTrack('/audio/sd.ogg')
-  var clap = new DMSampleTrack('/audio/cp.ogg')
+  const hatTrack = new DMSampleTrack('/audio/hh.ogg')
+  const kickTrack = new DMSampleTrack('/audio/bd.ogg')
+  const snare = new DMSampleTrack('/audio/sd.ogg')
+  const clap = new DMSampleTrack('/audio/cp.ogg')
 
-  var swingSlider = qsel('#transport-disp #swing')
-  elevt(swingSlider, 'input', function(evt) {
+  const swingSlider = qsel('#transport-disp #swing')
+  elevt(swingSlider, 'input', evt => {
     Tone.Transport.swing = evt.target.value
   })
 
-  var swing8Btn = qsel('#transport-disp #swing  #div8')
-  var swing16Btn = qsel('#transport-disp #swing  #div16')
+  const swing8Btn = qsel('#transport-disp #swing  #div8')
+  const swing16Btn = qsel('#transport-disp #swing  #div16')
 
-  function swingHandler(evt) {
+  const swingHandler = evt => {
     evt.preventDefault()
     if (swing8Btn.checked) {
       Tone.Transport.swingSubdivision = '8n'
@@ -100,9 +92,9 @@ ready(function() {
   elevt(swing8Btn, 'change', swingHandler)
   elevt(swing16Btn, 'change', swingHandler)
 
-  var tempoSld = qsel('#transport-disp #tempo input')
-  elevt(tempoSld, 'input', function(evt) {
-    var t = Math.round(parseFloat(evt.target.value))
+  const tempoSld = qsel('#transport-disp #tempo input')
+  elevt(tempoSld, 'input', evt => {
+    const t = Math.round(parseFloat(evt.target.value))
     Tone.Transport.bpm.value = t
   })
 
