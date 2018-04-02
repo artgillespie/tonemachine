@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+            ':35729/livereload.js?snipver=1"></' + 'script>')
+    </script>
+</head>
+
+<body>
+    <div id="transport-disp">
+        <div id="tempo">
+            <input type="range" min="40" max="220" step="1.0" />
+            <span id="disp"></span>
+        </div>
+        <div id="pos"></div>
+        <div id="swing">
+            <input id="amt" min="0" max="1" value="0" step="0.01" type="range" />
+            <div>
+                <input id="div8" type="radio" name="div" checked/>
+                <input id="div16" type="radio" name="div" />
+            </div>
+        </div>
+    </div>
+    <div id="pads"></div>
+    <input id="play-btn" type="checkbox" />
+
+    <script src="/js/Tone.min.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+
+</html>
