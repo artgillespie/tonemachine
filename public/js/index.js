@@ -33,11 +33,7 @@ ready(() => {
 
       this.player = new Tone.Player(smp_url).toMaster()
       this.player.retrigger = true
-      this.part = new Tone.Part(this.trigger)
-      this.part.loop = true
-      this.part.loopStart = '0:0:0'
-      this.part.loopEnd = '1:0:0'
-      this.part.start('0:0:0')
+      this.events = []
       this.setupPads()
     }
 
@@ -46,13 +42,24 @@ ready(() => {
     }
 
     createPadHandler(i) {
+      // TODO: User changes step state -> unschedule any existing events -> schedule events
+      // `scheduleEventsForState(state, step)`
+      // at each step `null || { state: {...}, events: [] }`
       var fn = evt => {
-        const q = Math.floor(i / 4)
-        const s = i % 4
         if (evt.target.checked) {
-          this.part.add(`0:${q}:${s}`)
+          const note = new Tone.Event((time, val) => {
+            this.player.start(time)
+          })
+          const inTicks = Tone.Transport.PPQ / 4
+          note.start(`${i * inTicks}i`)
+          this.events[i] = note
+          note.loop = true
+          note.loopEnd = '1m'
         } else {
-          this.part.remove(`0:${q}:${s}`)
+          const note = this.events[i]
+          note.stop()
+          note.dispose()
+          this.events[i] = null
         }
       }
       return fn.bind(this)
@@ -74,6 +81,8 @@ ready(() => {
   const kickTrack = new DMSampleTrack('/audio/bd.ogg')
   const snare = new DMSampleTrack('/audio/sd.ogg')
   const clap = new DMSampleTrack('/audio/cp.ogg')
+
+  const loadPreset = () => {}
 
   const swingSlider = qsel('#transport-disp #swing')
   elevt(swingSlider, 'input', evt => {
