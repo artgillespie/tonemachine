@@ -1,3 +1,5 @@
+import Tone from 'tone'
+
 const elid = id => document.getElementById(id)
 const elevt = (el, evt, fn) => el.addEventListener(evt, fn)
 const qsel = sel => document.querySelector(sel)
